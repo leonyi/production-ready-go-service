@@ -10,6 +10,8 @@ import (
 	"github.com/ardanlabs/service/foundation/logger"
 )
 
+var tag = "develop"
+
 func main() {
 	// constructs a pointer to the logger.
 	var log *logger.Logger
@@ -44,7 +46,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 	// -------------------------------------------------------------------------
 	// GOMAXPROCS
 
-	log.Info(ctx, "startup", "GOMAXPROCS", runtime.GOMAXPROCS(0))
+	log.Info(ctx, "startup", "GOMAXPROCS", runtime.GOMAXPROCS(0), "build", tag)
 
 	// Creates a channle of type os.Signal with a buffer of 1 to receive shutdown signals.
 	// The signal.Notify function is used to register the channel to receive notifications for SIGINT and SIGTERM signals,

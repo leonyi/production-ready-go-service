@@ -2,6 +2,9 @@
 SHELL_PATH = /bin/ash
 SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 
+run:
+	go run apis/services/sales/main.go | go run apis/tooling/logfmt/main.go
+
 # ==============================================================================
 # Define dependencies
 
@@ -25,10 +28,18 @@ SALES_IMAGE     := $(BASE_IMAGE_NAME)/$(SALES_APP):$(VERSION)
 METRICS_IMAGE   := $(BASE_IMAGE_NAME)/metrics:$(VERSION)
 AUTH_IMAGE      := $(BASE_IMAGE_NAME)/$(AUTH_APP):$(VERSION)
 
-run:
-	go run apis/services/sales/main.go | go run apis/tooling/logfmt/main.go
+# ==============================================================================
+# Building containers
 
+build: sales 
 
+sales:
+	docker build \
+		-f zarf/docker/dockerfile.sales \
+		-t $(SALES_IMAGE) \
+		--build-arg BUILD_TAG=$(VERSION) \
+		--build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+		.
 
 # ==============================================================================
 # Running from within k8s/kind
