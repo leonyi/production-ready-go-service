@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales
+  namespace: sales-system
+
+spec:
+  replicas: 1
+
+  strategy:
+    type: Recreate
+
+  template:
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+
+      containers:
+        - name: sales
+          resources:
+            requests:
+              cpu: "250m"      # I need access to 25ms/100ms on one CPU core.
+              memory: "100Mi"
+            limits:
+              cpu: "250m"      # Execute instructions at 25ms/100ms on one CPU core.
+              memory: "100Mi"
