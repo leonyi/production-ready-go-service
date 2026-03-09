@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "coolkit.name" . }}-config
+  labels:
+    {{- include "coolkit.labels" . | nindent 4 }}
+data:
+  LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  CACHE_TTL: {{ .Values.config.cacheTTL | quote }}
+  DB_HOST: {{ .Values.config.dbHost | quote }}
+  DB_NAME: {{ .Values.config.dbName | quote }}
+  REQUEST_TIMEOUT: {{ .Values.config.requestTimeout | quote }}

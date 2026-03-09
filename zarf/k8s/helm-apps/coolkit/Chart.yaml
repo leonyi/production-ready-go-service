@@ -1,0 +1,6 @@
+apiVersion: v2
+name: coolkit
+description: Helm chart for the coolkit internal HTTP API service
+type: application
+version: 0.1.0
+appVersion: "sha-placeholder"

@@ -1,0 +1,18 @@
+image:
+  tag: sha-stable456
+
+config:
+  logLevel: info
+  cacheTTL: 30s
+  dbHost: coolkit-production-db
+  dbName: coolkit
+  requestTimeout: 2s
+  environment: production
+
+secretConfig:
+  dbUser: coolkit
+  dbPassword: production-placeholder
+
+scaling:
+  minReplicaCount: 10
+  maxReplicaCount: 100

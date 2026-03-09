@@ -1,0 +1,18 @@
+image:
+  tag: sha-abc123
+
+config:
+  logLevel: debug
+  cacheTTL: 15s
+  dbHost: coolkit-prestaging-db
+  dbName: coolkit_prestaging
+  requestTimeout: 2s
+  environment: prestaging
+
+secretConfig:
+  dbUser: coolkit_prestaging
+  dbPassword: prestaging-placeholder
+
+scaling:
+  minReplicaCount: 10
+  maxReplicaCount: 30

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "coolkit.name" . }}
+  labels:
+    {{- include "coolkit.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "coolkit.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "coolkit.name" . }}
+        {{- include "coolkit.labels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 30:{% widthratio this_value max_value max_width as width%}
+      containers:
+        - name: coolkit
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: metrics
+              containerPort: 2345
+          envFrom:
+            - configMapRef:
+                name: {{ include "coolkit.name" . }}-config
+            - secretRef:
+                name: {{ include "coolkit.name" . }}-secrets
+          env:
+            - name: PEER_DISOVERY_DNS
+              value: {{ .Values.scaling.scalerAddress }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.healthPath }}
+              port: metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.healthPath }}
+              port: metrics
+            initialDelaySeconds: 10
+            periodSeconds: 20

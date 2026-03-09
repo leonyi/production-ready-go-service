@@ -1,0 +1,40 @@
+image:
+  repository: gcr.io/example/coolkit
+  tag: sha-placeholder
+  pullPolicy: IfNotPresent
+
+replicaCount: 10
+
+service:
+  type: ClusterIP
+  port: 8080
+  metricsPort: 2345
+
+resources:
+  requests:
+    cpu: "2"
+    memory: "4Gi"
+  limits:
+    cpu: "2"
+    memory: "4Gi"
+
+config:
+  logLevel: info
+  cacheTTL: 30s
+  dbHost: coolkit-db
+  dbName: coolkit
+  requestTimeout: 2s
+
+secretConfig:
+  dbUser: coolkit
+  dbPassword: will-be-populated-likely-via-external-secrets-kms
+
+scaling:
+  minReplicaCount: 10
+  maxReplicaCount: 100
+  scalerAddress: http://scaler.production.svc.cluster.local/estimate/coolkit
+  pollingInterval: 30
+  cooldownPeriod: 300
+
+probes:
+  healthPath: /healthz

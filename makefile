@@ -174,3 +174,25 @@ deps-reset:
 tidy:
 	go mod tidy
 	go mod vendor
+
+########################################
+# Helm
+########################################
+
+HELM_CHART := zarf/k8s/helm-apps/coolkit
+HELM_RELEASE := coolkit
+
+helm-lint:
+	@echo "Linting Helm chart..."
+	helm lint $(HELM_CHART)
+
+helm-template:
+	@echo "Rendering Helm chart with default values..."
+	helm template $(HELM_RELEASE) $(HELM_CHART)
+
+RENDER_DIR := rendered
+helm-render:
+	@echo "Rendering Helm chart to file..."
+	mkdir -p $(RENDER_DIR)
+	helm template $(HELM_RELEASE) $(HELM_CHART) > $(RENDER_DIR)/coolkit.yaml
+	@echo "Output written to $(RENDER_DIR)/coolkit.yaml"
